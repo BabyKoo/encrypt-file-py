@@ -52,6 +52,7 @@ def encrypt_file(key, in_filename, out_filename=None):
                     chunk += pad_len.to_bytes(1, byteorder='big') * (pad_len)
                 # 写入加密后的块
                 outfile.write(encryptor.encrypt(chunk))
+            print('-- Encryption finished. --')
 
 
 def decrypt_file(key, in_filename, out_filename=None):
@@ -92,7 +93,7 @@ def decrypt_file(key, in_filename, out_filename=None):
                 # 写入解密后的块
                 outfile.write(d_chunk)
                 h.update(d_chunk)
-        print('-- Decrypted finished. --')
+        print('-- Decryption finished. --')
         print('-- Integrity: --')
         print(h.digest() == file_hash)
 
