@@ -50,7 +50,6 @@ def encrypt_file(key, in_filename, out_filename=None):
                     pad_len = (16 - len(chunk) % 16)
                     # 填充 pad_len 个二进制数字 pad_len, pad_len 为填充字节数，
                     chunk += pad_len.to_bytes(1, byteorder='big') * (pad_len)
-                    # chunk += b'\x04' * (pad_len)
                 # 写入加密后的块
                 outfile.write(encryptor.encrypt(chunk))
 
@@ -110,14 +109,13 @@ def main():
     args = sys.argv
     if len(args) < 2:
         print_help()
-
+    # 获取密码，模式和文件名
     if '-e' in args:
         mode = 'encrypt'
     elif '-d' in args:
         mode = 'decrypt'
     else:
         print_help()
-    # 获取密码，模式和文件名
     if '-p' not in args or '-f' not in args:
         print_help()
     else:
@@ -125,7 +123,6 @@ def main():
         password = args[p_index + 1]
         f_index = args.index("-f")
         filename = args[f_index + 1]
-
     # 根据模式调用相应的函数
     if mode == 'encrypt':
         encrypt_file(password, filename)
