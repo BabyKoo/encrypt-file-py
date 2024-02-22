@@ -87,7 +87,6 @@ def decrypt_file(key, in_filename, out_filename=None):
                         if int.from_bytes(d_chunk[i:i+1], byteorder='big') != pad_len:
                             pad_len = 0
                             break
-                print(pad_len)
                 if pad_len != 0:
                     d_chunk = d_chunk[:-pad_len]
                 # 写入解密后的块
