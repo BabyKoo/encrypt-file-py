@@ -73,7 +73,7 @@ def decrypt_file(key, in_filename, out_filename=None):
         with open(out_filename, 'wb') as outfile:
             # 读取输入文件的内容，每次读取一个块（16字节）
             while True:
-                pad_len = -1
+                pad_len = 0
                 chunk = infile.read(16)
                 # 如果到达文件末尾，跳出循环
                 if len(chunk) == 0:
@@ -81,13 +81,15 @@ def decrypt_file(key, in_filename, out_filename=None):
                 d_chunk = decryptor.decrypt(chunk)
                 # 如果文件最后为二进制数字 1~16, 则去除填充的数字
                 if int.from_bytes(d_chunk[-1:], byteorder='big') >= 1 and int.from_bytes(d_chunk[-1:], byteorder='big') < 16:
-                    # 判断是否为 pad_len 个连续的 pad_len
-                    for i in range(-pad_len, -1):
-                        if int.from_bytes(d_chunk[i:], byteorder='big') != pad_len:
-                            pad_len = -1
-                            break
                     pad_len = int.from_bytes(d_chunk[-1:], byteorder='big')
-                d_chunk = d_chunk[:-pad_len]
+                    # 判断是否为 pad_len 个连续的 pad_len
+                    for i in range(-pad_len, -2):
+                        if int.from_bytes(d_chunk[i:i+1], byteorder='big') != pad_len:
+                            pad_len = 0
+                            break
+                print(pad_len)
+                if pad_len != 0:
+                    d_chunk = d_chunk[:-pad_len]
                 # 写入解密后的块
                 outfile.write(d_chunk)
                 h.update(d_chunk)
