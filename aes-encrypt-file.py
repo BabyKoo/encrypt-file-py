@@ -146,5 +146,6 @@ def main():
     sys.exit(0)
 
 
+# 控制台运行
 if __name__ == '__main__':
   main()
