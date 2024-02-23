@@ -1,6 +1,6 @@
 ## Usage
 
-```sh
+```shell
 python ./aes-encrypt-file.py [-h] -p PASSWORD [-e] [-d] -f FILENAME [-v VERSION] [-r {True,False}]
 ```
 
@@ -24,7 +24,7 @@ A python script for encrypt or decrypt a file with AES.
 
 | Field                  | Length(Byte) | Detail                                    |
 | ---------------------- | ------------ | ----------------------------------------- |
-| Version                | 1            | The First-level version number           |
+| Version                | 1            | The First-level version number.           |
 | IV                     | 16           | AES initialization vector.                |
 | Time stamp             | 16           | Plain text(ASCII), be used for hash-salt. |
 | Origin File hash value | 32           | SHA-256 value.                            |
