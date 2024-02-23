@@ -84,8 +84,8 @@ def decrypt_file(key, in_filename, out_filename=None):
                 if int.from_bytes(d_chunk[-1:], byteorder='big') >= 1 and int.from_bytes(d_chunk[-1:], byteorder='big') < 16:
                     pad_len = int.from_bytes(d_chunk[-1:], byteorder='big')
                     # 判断是否为 pad_len 个连续的 pad_len
-                    for i in range(-pad_len, -2):
-                        if int.from_bytes(d_chunk[i:i+1], byteorder='big') != pad_len:
+                    for i in range(-pad_len, -1):
+                        if d_chunk[i] != pad_len:
                             pad_len = 0
                             break
                 if pad_len != 0:
