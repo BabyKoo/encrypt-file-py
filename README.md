@@ -1,7 +1,9 @@
-## Usage:
-encrypt-file-0.1.py [-h] -p PASSWORD [-e] [-d] -f FILENAME
-
-Encrypt or decrypt a file with AES.
+## Usage
+```sh
+python ./encrypt-file-py.py [-h] -p PASSWORD [-e] [-d] -f FILENAME
+```
+## Description
+A python script for Encrypt or decrypt a file with AES.
 
 options:
   -h, --help            show this help message and exit
