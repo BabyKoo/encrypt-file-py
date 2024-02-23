@@ -1,7 +1,7 @@
 ## Usage
 
 ```sh
-python ./aes-encrypt-file.py [-h] -p PASSWORD [-e] [-d] -f FILENAME [-v VERSION]
+python ./aes-encrypt-file.py [-h] -p PASSWORD [-e] [-d] -f FILENAME [-v VERSION] [-r {True,False}]
 ```
 
 ## Description
@@ -16,15 +16,16 @@ A python script for encrypt or decrypt a file with AES.
 - -d, --decrypt: to decrypt the file
 - -f FILENAME, --filename FILENAME: the name of the file to encrypt or decrypt
 - -v VERSION, --version VERSION: the version number of the encryption method
+- -r {True,False}, --remove {True,False}: is to purge origin file on File System required while encrypting
 
 ## Structure
 
 ### Encrypted data
 
-| Field                  | Length(Byte) | Detail                             |
-| ---------------------- | ------------ | ---------------------------------- |
-| Version                | 1            | The First-level version number    |
-| IV                     | 16           | AES initialization vector.         |
-| Time stamp             | 16           | Plain text, be used for hash-salt. |
-| Origin File hash value | 32           | SHA-256 value.                     |
-| Cipherdata             | Variable     |                                    |
+| Field                  | Length(Byte) | Detail                                    |
+| ---------------------- | ------------ | ----------------------------------------- |
+| Version                | 1            | The First-level version number           |
+| IV                     | 16           | AES initialization vector.                |
+| Time stamp             | 16           | Plain text(ASCII), be used for hash-salt. |
+| Origin File hash value | 32           | SHA-256 value.                            |
+| Cipherdata             | Variable     |                                           |

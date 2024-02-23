@@ -9,7 +9,7 @@ from Cryptodome.Cipher import AES
 
 
 # 定义加密函数
-def encrypt_file(key, in_filename, out_filename=None, version=1):
+def encrypt_file(key, in_filename, out_filename=None, version=1, remove=True):
   if version == 1:
     # 如果没有指定输出文件名，则在输入文件名后加上".enc"后缀
     if not out_filename:
@@ -25,7 +25,7 @@ def encrypt_file(key, in_filename, out_filename=None, version=1):
     encryptor = AES.new(key, AES.MODE_GCM, iv)
     _hash = hashlib.sha256()
     # 以二进制模式打开输入输出文件
-    with open(in_filename, 'rb') as infile, open(out_filename, 'wb') as outfile:
+    with open(in_filename, 'rb+') as infile, open(out_filename, 'wb') as outfile:
       for chunk in iter(lambda: infile.read(4096), b''):
         # 向哈希对象输入数据
         _hash.update(chunk)
@@ -39,10 +39,18 @@ def encrypt_file(key, in_filename, out_filename=None, version=1):
       # 写入原始文件哈希值
       outfile.write(file_hash)
       # 将输入文件指针指向起始位置
-      infile.seek(0)
+      infile.seek(0, 0)
       # 读取输入文件的内容，每次读取一个块（16字节）
       while True:
         chunk = infile.read(16)
+        # 清除原文件数据 
+        # purge origin file on file system
+        if remove:
+          if infile.tell() > 16:
+            infile.seek(-16, 0)
+          else:
+            infile.seek(0, 0)
+          infile.write(b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
         # 如果到达文件末尾，跳出循环
         if len(chunk) == 0:
           break
@@ -55,6 +63,9 @@ def encrypt_file(key, in_filename, out_filename=None, version=1):
         # 写入加密后的块
         outfile.write(encryptor.encrypt(chunk))
       logging.info('-- Encryption finished. --')
+    if remove:
+      os.remove(in_filename)
+      logging.info('-- Origin file removed. --')
   else:
     logging.warn('-- Unsupported version. --')
     sys.exit(0)
@@ -117,15 +128,17 @@ def main():
   parser.add_argument('-d', '--decrypt', action='store_true', help='decrypt the file')
   parser.add_argument('-f', '--filename', required=True, help='the name of the file to encrypt or decrypt')
   parser.add_argument('-v', '--version', help='the version number of the encryption method', default=1)
+  parser.add_argument('-r', '--remove', help='is to purge origin file on File System required while encrypting', default='True', choices=['True', 'False'])
   # 解析命令行参数
   args = parser.parse_args()
   # 获取密码，模式和文件名
   password = args.password
   filename = args.filename
   version = int(args.version)
+  remove = bool(args.remove)
   # 根据模式调用相应的函数
   if args.encrypt:
-    encrypt_file(password, filename, version=version)
+    encrypt_file(password, filename, version=version, remove=remove)
   elif args.decrypt:
     decrypt_file(password, filename)
   else:
