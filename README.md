@@ -16,7 +16,7 @@ A python script for encrypt or decrypt a file with AES.
 - -d, --decrypt: to decrypt the file
 - -f FILENAME, --filename FILENAME: the name of the file to encrypt or decrypt
 - -v VERSION, --version VERSION: the version number of the encryption method
-- -r {True,False}, --remove {True,False}: is to purge origin file on File System required while encrypting
+- -r {True,False}, --remove {True,False}: to purge the origin file from File System while encrypting
 
 ## Structure
 
