@@ -22,13 +22,13 @@ def encrypt_file(key, in_filename, out_filename=None):
   iv = os.urandom(AES.block_size)
   # 创建AES加密器
   encryptor = AES.new(key, AES.MODE_GCM, iv)
-  h = hashlib.sha256()
+  _hash = hashlib.sha256()
   # 以二进制模式打开输入输出文件
   with open(in_filename, 'rb') as infile, open(out_filename, 'wb') as outfile:
     for chunk in iter(lambda: infile.read(4096), b''):
       # 向哈希对象输入数据
-      h.update(chunk)
-    file_hash = h.digest()
+      _hash.update(chunk)
+    file_hash = _hash.digest()
     # 写入初始向量
     outfile.write(iv)
     # 写入时间戳盐
@@ -47,6 +47,7 @@ def encrypt_file(key, in_filename, out_filename=None):
       elif len(chunk) % 16 != 0:
         pad_len = (16 - len(chunk) % 16)
         # 填充 pad_len 个二进制数字 pad_len, pad_len 为填充字节数
+        # Pad the end with consecutive binary digits ``pad_len``, pad_len is the number of padding bytes
         chunk += pad_len.to_bytes(1, byteorder='big') * (pad_len)
       # 写入加密后的块
       outfile.write(encryptor.encrypt(chunk))
@@ -63,7 +64,7 @@ def decrypt_file(key, in_filename, out_filename=None):
     iv = infile.read(16)
     time_salt = infile.read(16).decode()
     file_hash = infile.read(32)
-    hash = hashlib.sha256()
+    _hash = hashlib.sha256()
     # 用密码生成一个32字节的密钥
     key = hashlib.sha256((key + time_salt).encode()).digest()
     # 创建AES解密器
@@ -90,10 +91,10 @@ def decrypt_file(key, in_filename, out_filename=None):
           d_chunk = d_chunk[:-pad_len]
         # 写入解密后的块
         outfile.write(d_chunk)
-        hash.update(d_chunk)
+        _hash.update(d_chunk)
       logging.info('-- Decryption finished. --')
       logging.info('-- Integrity: --')
-      logging.info(hash.digest() == file_hash)
+      logging.info(_hash.digest() == file_hash)
 
 
 def main():
