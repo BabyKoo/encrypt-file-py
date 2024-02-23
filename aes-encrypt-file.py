@@ -50,7 +50,7 @@ def encrypt_file(key, in_filename, out_filename=None, version=1, remove=True):
             infile.seek(-16, 0)
           else:
             infile.seek(0, 0)
-          infile.write(b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
+          infile.write(b'\x00' * 16)
         # 如果到达文件末尾，跳出循环
         if len(chunk) == 0:
           break
