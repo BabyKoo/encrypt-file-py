@@ -128,7 +128,7 @@ def main():
   parser.add_argument('-d', '--decrypt', action='store_true', help='decrypt the file')
   parser.add_argument('-f', '--filename', required=True, help='the name of the file to encrypt or decrypt')
   parser.add_argument('-v', '--version', help='the version number of the encryption method', default=1)
-  parser.add_argument('-r', '--remove', help='is to purge origin file on File System required while encrypting', default='True', choices=['True', 'False'])
+  parser.add_argument('-r', '--remove', help='to purge the origin file from File System while encrypting', default='True', choices=['True', 'False'])
   # 解析命令行参数
   args = parser.parse_args()
   # 获取密码，模式和文件名
