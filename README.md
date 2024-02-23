@@ -1,6 +1,6 @@
 ## Usage
 ```sh
-python ./encrypt-file-py.py [-h] -p PASSWORD [-e] [-d] -f FILENAME
+python ./aes-encrypt-file.py [-h] -p PASSWORD [-e] [-d] -f FILENAME
 ```
 ## Description
 A python script for Encrypt or decrypt a file with AES.
