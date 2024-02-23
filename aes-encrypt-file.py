@@ -47,7 +47,7 @@ def encrypt_file(key, in_filename, out_filename=None, version=1, remove=True):
         # purge origin file on file system
         if remove:
           if infile.tell() > 16:
-            infile.seek(-16, 0)
+            infile.seek(-16, 1)
           else:
             infile.seek(0, 0)
           infile.write(b'\x00' * 16)
