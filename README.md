@@ -20,9 +20,9 @@ A python script for encrypt or decrypt a file with AES.
 
 ### Encrypted data
 
-| Field                  | Length(Byte) | Detail                     |
-| ---------------------- | ------------ | -------------------------- |
-| IV                     | 16           | AES initialization vector. |
-| Time stamp             | 16           |                            |
-| Origin File hash value | 32           |                            |
-| Cipherdata             | Variable     |                            |
+| Field                  | Length(Byte) | Detail                              |
+| ---------------------- | ------------ | ----------------------------------- |
+| IV                     | 16           | AES initialization vector.          |
+| Time stamp             | 16           | Plain text, be used for hash salt. |
+| Origin File hash value | 32           |                                     |
+| Cipherdata             | Variable     |                                     |
